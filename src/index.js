@@ -15,13 +15,11 @@ const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
   context: {
-    me: users[1],
+    me: models.users[1],
     models,
   },
 });
- 
+
 server.applyMiddleware({ app, path: '/graphql' });
 
-app.listen(process.env.PORT, () =>
-  console.log(`Example app listening on port ${process.env.PORT}!`),
-);
+app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`));

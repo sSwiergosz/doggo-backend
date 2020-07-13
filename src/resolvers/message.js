@@ -2,12 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default {
   Query: {
-    messages: (parent, args, { models }) => {
-      return Object.values(models.messages);
-    },
-    message: (parent, { id }, { models }) => {
-      return models.messages[id];
-    },
+    messages: (parent, args, { models }) => Object.values(models.messages),
+    message: (parent, { id }, { models }) => models.messages[id],
   },
 
   Mutation: {
@@ -39,8 +35,6 @@ export default {
   },
 
   Message: {
-    user: (message, args, { models }) => {
-      return models.users[message.userId];
-    },
+    user: (message, args, { models }) => models.users[message.userId],
   },
 };

@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express';
 
 import userSchema from './user';
 import messageSchema from './message';
- 
+
 const commonSchema = gql`
     type Query {
         _: Boolean
