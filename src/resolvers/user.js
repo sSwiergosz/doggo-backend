@@ -1,13 +1,32 @@
+import bcrypt from 'bcryptjs';
+
 export default {
   Query: {
-    users: (parent, args, { models }) => Object.values(models.users),
-    user: (parent, { id }, { models }) => models.users[id],
-    me: (parent, args, { me }) => me,
+    async user(root, { id }, { models }) {
+      return models.User.findByPk(id);
+    },
+  },
+
+  Mutation: {
+    async createUser(root, {
+      email,
+      name,
+      password,
+    }, { models }) {
+      return models.User.create({
+        email,
+        name,
+        password: await bcrypt.hash(password, 10),
+      });
+    },
   },
 
   User: {
-    messages: (user, args, { models }) => Object.values(models.messages).filter(
-      (message) => message.userId === user.id,
-    ),
+    async dogs(user) {
+      return user.getDogs();
+    },
+    async messages(user) {
+      return user.getMessages();
+    },
   },
 };
