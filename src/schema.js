@@ -27,6 +27,7 @@ const schema = gql`
   type Query {
     allDogs: [Dog!]
     allMessages: [Message!]
+    allUsers: [User!]
     dog(id: ID!): Dog
     message(id: ID!): Message
     user(id: ID!): User

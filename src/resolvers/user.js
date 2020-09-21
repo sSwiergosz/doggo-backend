@@ -18,6 +18,9 @@ const createToken = (user, secret, expiresIn) => {
 
 export default {
   Query: {
+    async allUsers(root, args, { models }) {
+      return models.User.findAll();
+    },
     async user(root, { id }, { models }) {
       return models.User.findByPk(id);
     },
