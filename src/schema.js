@@ -43,6 +43,10 @@ const schema = gql`
       userId: Int!
       text: String!
     ): Message!
+    signIn(
+      name: String!
+      password: String!
+    ): Token!
     signUp(
       name: String!
       email: String!

@@ -12,12 +12,12 @@ const app = express();
 app.use(cors());
 
 const server = new ApolloServer({
-  typeDefs: schema,
-  resolvers,
   context: {
     models,
     secret: process.env.SECRET,
   },
+  resolvers,
+  typeDefs: schema,
 });
 
 server.applyMiddleware({ app, path: '/graphql' });

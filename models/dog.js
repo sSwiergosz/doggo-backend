@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Dog.associate = (models) => {
     Dog.belongsTo(models.User, {
-      foreignKey: {
-        name: 'userId',
-        allowNull: false,
-      },
       as: 'dogs',
+      foreignKey: {
+        allowNull: false,
+        name: 'userId',
+      },
     });
   };
 

@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Message.associate = (models) => {
     Message.belongsTo(models.User, {
+      as: 'messages',
       foreignKey: {
         name: 'userId',
         allowNull: false,
       },
-      as: 'messages',
     });
   };
 

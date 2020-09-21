@@ -1,44 +1,52 @@
+import bcrypt from 'bcryptjs';
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    name: {
+    email: {
+      allowNull: false,
       type: DataTypes.STRING,
       unique: true,
-      allowNull: false,
       validate: {
+        isEmail: true,
         notEmpty: true,
       },
     },
-    email: {
+    name: {
+      allowNull: false,
       type: DataTypes.STRING,
       unique: true,
-      allowNull: false,
       validate: {
         notEmpty: true,
-        isEmail: true,
       },
     },
     password: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
       validate: { notEmpty: true },
     },
   });
 
+  User.findByLogin = (login) => User.findOne({ where: { name: login } });
+
+  User.prototype.validatePassword = (password, currentPassword) => (
+    bcrypt.compare(password, currentPassword)
+  );
+
   User.associate = (models) => {
     User.hasMany(models.Message, {
-      foreignKey: {
-        name: 'userId',
-        allowNull: false,
-      },
       as: 'messages',
+      foreignKey: {
+        allowNull: false,
+        name: 'userId',
+      },
     });
 
     User.hasMany(models.Dog, {
-      foreignKey: {
-        name: 'userId',
-        allowNull: false,
-      },
       as: 'dogs',
+      foreignKey: {
+        allowNull: false,
+        name: 'userId',
+      },
     });
   };
 
