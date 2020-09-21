@@ -1,4 +1,23 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+const createToken = (user, secret, expiresIn) => {
+  const {
+    email,
+    id,
+    name,
+  } = user;
+
+  return jwt.sign(
+    {
+      id,
+      email,
+      name,
+    },
+    secret,
+    { expiresIn },
+  );
+};
 
 export default {
   Query: {
@@ -8,16 +27,18 @@ export default {
   },
 
   Mutation: {
-    async createUser(root, {
-      email,
-      name,
-      password,
-    }, { models }) {
-      return models.User.create({
+    signUp: async (
+      root,
+      { email, name, password },
+      { models, secret },
+    ) => {
+      const user = models.User.create({
         email,
         name,
         password: await bcrypt.hash(password, 10),
       });
+
+      return { token: createToken(user, secret, '30m') };
     },
   },
 

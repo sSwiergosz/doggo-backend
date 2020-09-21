@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express';
 
 const schema = gql`
   type User {
-    id: Int!
+    id: ID!
     dogs: [Dog!]
     email: String!
     messages: [Message!]
@@ -10,7 +10,7 @@ const schema = gql`
   }
 
   type Dog {
-    id: Int!
+    id: ID!
     age: Int!
     breed: String!
     name: String!
@@ -18,7 +18,7 @@ const schema = gql`
   }
 
   type Message {
-    id: Int!
+    id: ID!
     createdAt: String!
     text: String!
     user: User!
@@ -27,9 +27,9 @@ const schema = gql`
   type Query {
     allDogs: [Dog!]
     allMessages: [Message!]
-    dog(id: Int!): Dog
-    message(id: Int!): Message
-    user(id: Int!): User
+    dog(id: ID!): Dog
+    message(id: ID!): Message
+    user(id: ID!): User
   }
 
   type Mutation {
@@ -43,11 +43,15 @@ const schema = gql`
       userId: Int!
       text: String!
     ): Message!
-    createUser(
-      email: String!,
-      name: String!,
+    signUp(
+      name: String!
+      email: String!
       password: String!
-    ): User!
+    ): Token!
+  }
+
+  type Token {
+    token: String!
   }
 `;
 
