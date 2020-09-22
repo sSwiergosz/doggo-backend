@@ -1,15 +1,27 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { AuthenticationError, UserInputError } from 'apollo-server';
+import { combineResolvers } from 'graphql-resolvers';
+import {
+  AuthenticationError,
+  UserInputError,
+} from 'apollo-server';
+
+import { isAdmin } from './authorization';
 
 const createToken = (user, secret, expiresIn) => {
-  const { email, id, name } = user;
+  const {
+    email,
+    id,
+    name,
+    role,
+  } = user;
 
   return jwt.sign(
     {
       id,
       email,
       name,
+      role,
     },
     secret,
     { expiresIn },
@@ -27,6 +39,12 @@ export default {
   },
 
   Mutation: {
+    deleteUser: combineResolvers(
+      isAdmin,
+      async (root, { id }, { models }) => models.User.destroy({
+        where: { id },
+      }),
+    ),
     signIn: async (root, { name, password }, { models, secret }) => {
       const user = await models.User.findByLogin(name);
       let isValid;
