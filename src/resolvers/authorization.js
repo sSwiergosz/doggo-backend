@@ -12,13 +12,37 @@ export const isAdmin = combineResolvers(
     : new ForbiddenError('Not an admin')),
 );
 
-export const isMessageOwner = async (
+export const isDogOwner = async (
   root,
-  { id },
+  {
+    dog: {
+      dogId,
+    },
+  },
   { models, authenticatedUser },
 ) => {
-  const message = await models.Message.findByPk(id, { raw: true });
-  const { userId } = message;
+  const singleDog = await models.Dog.findByPk(dogId, { raw: true });
+  const { userId } = singleDog;
+  const { id: authentiactedUserId } = authenticatedUser;
+
+  if (userId === authentiactedUserId) {
+    return skip;
+  }
+
+  throw new ForbiddenError('Not an owner');
+};
+
+export const isMessageOwner = async (
+  root,
+  {
+    message: {
+      messageId,
+    },
+  },
+  { models, authenticatedUser },
+) => {
+  const singleMessage = await models.Message.findByPk(messageId, { raw: true });
+  const { userId } = singleMessage;
   const { id: authentiactedUserId } = authenticatedUser;
 
   if (userId === authentiactedUserId) {

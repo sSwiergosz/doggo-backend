@@ -17,7 +17,8 @@ export default {
   Mutation: {
     createMessage: combineResolvers(
       isAuthenticated,
-      (root, { text }, { models, authenticatedUser }) => {
+      (root, { message }, { models, authenticatedUser }) => {
+        const { text } = message;
         const { id: userId } = authenticatedUser;
 
         return models.Message.create({
@@ -30,6 +31,19 @@ export default {
       isAuthenticated,
       isMessageOwner,
       (root, { id }, { models }) => models.Message.destroy({ where: { id } }),
+    ),
+    updateMessage: combineResolvers(
+      isAuthenticated,
+      isMessageOwner,
+      async (root, { message }, { models }) => {
+        const {
+          messageId,
+          text,
+        } = message;
+        const singleMessage = await models.Message.findByPk(messageId);
+
+        return singleMessage.update({ text });
+      },
     ),
   },
 

@@ -35,16 +35,9 @@ const schema = gql`
   }
 
   type Mutation {
-    createDog(
-      userId: Int!
-      age: Int!
-      breed: String!
-      name: String!
-    ): Dog!
-    createMessage(
-      userId: Int!
-      text: String!
-    ): Message!
+    createDog(dog: DogInput): Dog!
+    createMessage(message: MessageInput): Message!
+    deleteDog(id: ID!): Boolean!
     deleteMessage(id: ID!): Boolean!
     deleteUser(id: ID!): Boolean!
     signIn(
@@ -56,10 +49,36 @@ const schema = gql`
       email: String!
       password: String!
     ): Token!
+    updateDog(dog: UpdateDogInput): Dog!
+    updateMessage(message: UpdateMessageInput): Message!
   }
 
   type Token {
     token: String!
+  }
+
+  input DogInput {
+    userId: ID!
+    age: Int!
+    breed: String!
+    name: String!
+  }
+
+  input UpdateDogInput {
+    dogId: ID!
+    age: Int
+    breed: String
+    name: String
+  }
+
+  input MessageInput {
+    userId: ID!
+    text: String!
+  }
+
+  input UpdateMessageInput {
+    messageId: ID!
+    text: String
   }
 `;
 
