@@ -29,7 +29,7 @@ export default {
     deleteMessage: combineResolvers(
       isAuthenticated,
       isMessageOwner,
-      (parent, { id }, { models }) => models.Message.destroy({ where: { id } }),
+      (root, { id }, { models }) => models.Message.destroy({ where: { id } }),
     ),
   },
 

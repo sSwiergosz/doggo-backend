@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: { notEmpty: true },
     },
+    role: {
+      type: DataTypes.STRING,
+    },
   });
 
   User.findByLogin = (login) => User.findOne({ where: { name: login } });
