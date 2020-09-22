@@ -7,6 +7,7 @@ const schema = gql`
     email: String!
     messages: [Message!]
     name: String!
+    role: String
   }
 
   type Dog {
@@ -44,6 +45,8 @@ const schema = gql`
       userId: Int!
       text: String!
     ): Message!
+    deleteMessage(id: ID!): Boolean!
+    deleteUser(id: ID!): Boolean!
     signIn(
       name: String!
       password: String!

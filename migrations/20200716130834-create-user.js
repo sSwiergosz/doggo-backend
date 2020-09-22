@@ -27,6 +27,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      role: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
     });
   },
   down: async (queryInterface) => {

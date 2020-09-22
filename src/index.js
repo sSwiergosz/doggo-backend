@@ -1,7 +1,11 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import jwt from 'jsonwebtoken';
+import {
+  ApolloServer,
+  AuthenticationError,
+} from 'apollo-server-express';
 
 import schema from './schema';
 import resolvers from './resolvers';
@@ -11,10 +15,31 @@ const app = express();
 
 app.use(cors());
 
+const getAuthenticatedUser = async (req) => {
+  const token = req.headers['x-token'];
+
+  if (token) {
+    try {
+      return await jwt.verify(token, process.env.SECRET);
+    } catch (e) {
+      throw new AuthenticationError(
+        'Your session expired. Sign in again.',
+      );
+    }
+  }
+
+  return false;
+};
+
 const server = new ApolloServer({
-  context: {
-    models,
-    secret: process.env.SECRET,
+  context: async ({ req }) => {
+    const authenticatedUser = await getAuthenticatedUser(req);
+
+    return {
+      models,
+      authenticatedUser,
+      secret: process.env.SECRET,
+    };
   },
   resolvers,
   typeDefs: schema,
