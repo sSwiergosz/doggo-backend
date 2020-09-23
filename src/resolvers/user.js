@@ -8,6 +8,9 @@ import {
 
 import { isAdmin } from './authorization';
 
+const SALT_ROUNDS = 10;
+const TOKEN_TIME = '30m';
+
 const createToken = (user, secret, expiresIn) => {
   const {
     email,
@@ -57,20 +60,19 @@ export default {
       }
 
       if (isValid) {
-        return { token: createToken(user, secret, '30m') };
+        return { token: createToken(user, secret, TOKEN_TIME) };
       }
 
       throw new AuthenticationError('Invalid password.');
     },
     signUp: async (root, { email, name, password }, { models, secret }) => {
-      const SALT_ROUNDS = 10;
       const user = models.User.create({
         email,
         name,
         password: await bcrypt.hash(password, SALT_ROUNDS),
       });
 
-      return { token: createToken(user, secret, '30m') };
+      return { token: createToken(user, secret, TOKEN_TIME) };
     },
   },
 
