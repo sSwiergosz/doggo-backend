@@ -7,9 +7,11 @@ export const isAuthenticated = (root, args, { authenticatedUser }) => (
 
 export const isAdmin = combineResolvers(
   isAuthenticated,
-  (root, args, { authenticatedUser: { role } }) => (role === 'ADMIN'
-    ? skip
-    : new ForbiddenError('Not an admin')),
+  (root, args, { authenticatedUser: { role } }) => (
+    role === 'ADMIN'
+      ? skip
+      : new ForbiddenError('Not an admin')
+  ),
 );
 
 export const isDogOwner = async (

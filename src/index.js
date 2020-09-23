@@ -15,12 +15,12 @@ const app = express();
 
 app.use(cors());
 
-const getAuthenticatedUser = async (req) => {
+const getAuthenticatedUser = (req) => {
   const token = req.headers['x-token'];
 
   if (token) {
     try {
-      return await jwt.verify(token, process.env.SECRET);
+      return jwt.verify(token, process.env.SECRET);
     } catch (e) {
       throw new AuthenticationError(
         'Your session expired. Sign in again.',
@@ -32,8 +32,8 @@ const getAuthenticatedUser = async (req) => {
 };
 
 const server = new ApolloServer({
-  context: async ({ req }) => {
-    const authenticatedUser = await getAuthenticatedUser(req);
+  context: ({ req }) => {
+    const authenticatedUser = getAuthenticatedUser(req);
 
     return {
       models,
